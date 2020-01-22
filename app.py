@@ -4,7 +4,7 @@ from reports import getReport
 app = Flask(__name__)
 @app.route('/')
 def home():
-    return render_template("")
+    return render_template("home.html")
     
 @app.route('/<id>/<type>')
 def reportPDF(id,type):
