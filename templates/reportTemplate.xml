@@ -1,0 +1,12 @@
+<report>
+    <reportID>{{reportID}}</reportID>
+    <organization>{{organizationName}}</organization>
+    <reported_at>{{reported_at}}</reported_at>
+    <created_at>{{created_at}}</created_at>
+    <inventory>
+        {% for item in inventory %}
+            <itemname>{{item.name}}</itemname>
+            <itemprice>{{item.price}}</itemprice>
+        {% endfor %}
+    </inventory>
+</report>

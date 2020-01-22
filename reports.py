@@ -2,6 +2,9 @@ import psycopg2
 import json
 import os
 
+from jinja2 import Environment, FileSystemLoader
+from weasyprint import HTML
+
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -21,16 +24,30 @@ password = os.getenv("PWORD")
 #   inventory: [{ name:"ITEM_NAME" , price:ITEM_PRICE },...,{ name:"ITEM_NAME" , price:ITEM_PRICE }]
 # }
 
-# Simple routine to run a query on the database and print the results:
-def getReports():
+# Simple routine to run a query on the database and return the report with given ID:
+def getReport(id, reportFormat):
     conn = psycopg2.connect('postgres://candidate.suade.org/suade', user=username, password=password)
     cursor = conn.cursor()
-    cursor.execute("select * from reports")
-    reports = cursor.fetchall()
-    print("REPORTS")
-    for i in reports:
-        print(i)
-        element = i[1]
-        y = json.loads(element)
-        print(y)
+    cursor.execute("select * from reports where id="+id)
+    report = cursor.fetchall()
+    if(cursor.rowcount == 0):
+        return "NO RESULTS"
+    reportObject = report[0][1]
+    reportObjectJSON = json.loads(reportObject)
     conn.close()
+    env = Environment(loader=FileSystemLoader('.'))
+    template_vars = {
+        "reportID" : id,
+        "organizationName": reportObjectJSON["organization"],
+        "reported_at": reportObjectJSON["reported_at"],
+        "created_at": reportObjectJSON["created_at"],
+        "inventory": reportObjectJSON["inventory"]
+    }
+    if(reportFormat == "PDF"):
+        template = env.get_template("./templates/reportTemplate.html")
+        html_out = template.render(template_vars)
+        return HTML(string=html_out).write_pdf()
+    elif(reportFormat == "XML"):
+        template = env.get_template("./templates/reportTemplate.xml")
+        return template.render(template_vars)
+    return False

@@ -4,16 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ title }}</title>
+    <title>Report ID: {{ reportID }}</title>
 </head>
 <body>
     <body>
-        <h2>Sales Funnel Report - National</h2>
+        <h2>Report ID: {{ reportID }}</h2>
+        <h4>Organization: {{ organizationName }}<br>
+        Reported on: {{ reported_at }}<br>
+        Created on: {{ created_at }}</h4>
+        <br>
+        <br>
         <table>
-            {% for item in items %}
-            <TR>
-               <TD class="c2">{{item}}</TD>
-            </TR>
+            <tr>
+                <th>Item Name</th>
+                <th>Price</th>
+            </tr>
+            {% for item in inventory %}
+            <tr>
+               <td class="c2">{{item.name}}</td>
+               <td class="c2">{{item.price}}</td>
+            </tr>
             {% endfor %}
         </table>
     </body>
