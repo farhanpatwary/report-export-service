@@ -4,7 +4,7 @@ itsdangerous==1.1.0
 Jinja2==2.10.3
 MarkupSafe==1.1.1
 pdfdocument==3.3
-Pillow==7.0.0
+Pillow==9.0.1
 pkg-resources==0.0.0
 psycopg2==2.8.4
 python-dotenv==0.10.5
